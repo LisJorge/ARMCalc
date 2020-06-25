@@ -1,25 +1,26 @@
 /*-:.:*-:.:*-:.:*-:.:*-:.:*-CALCULADORA:.:*-:.:*-:.:*-:.:*-:.:*-:.:*/
 /*Autores:*********************************************************/
 /**********Daris Lissette Jorge Rivera*********JR17002*************/
-/**********Luis Enrique Ch醰ez Orellana********CO170--*************/
+/**********Luis Enrique Ch谩vez Orellana********CO170--*************/
 	.include "division.s"
 	.include "power.s"
-	.include "fileManager.s"
 	.data
 in1:	.word 0
 in2: 	.word 0
 op:	.word 0
 res:	.word 0
 fmt:	.asciz "%d"
+nomFile:	.asciz "registro"
+msgError:	.asciz "Error al crear el archivo\n"
 msgIn1:	.asciz "Ingresar el primer operando(A):\n"
 msgIn2:	.asciz "Ingresar el segundo operando(B):\n"
-msgOp:	.asciz "\n  [1]  Suma A+B\n  [2]  Resta A-B \n  [3]  Multiplicaci髇 A*B\n  [4]  Divisi髇 A/B\n  [5]  Potenciaci髇 A^B\n  [6]  Salir\n"
+msgOp:	.asciz "\n  [1]  Suma A+B\n  [2]  Resta A-B \n  [3]  Multiplicaci贸n A*B\n  [4]  Divisi贸n A/B\n  [5]  Potenciaci贸n A^B\n  [6]  Salir\n"
 msgSuma:	.asciz "Suma de la forma: A+B\n"
 msgResta:	.asciz "Resta de la forma: A-B\n"
-msgMulti:	.asciz "Multiplicaci髇 de la forma: A*B\n"
-msgDiv:		.asciz "Divisi髇 de la forma: A/B\n"
-msgPow: 	.asciz "Potenciaci髇 de la forma: A^B\n"
-msgDef:		.asciz "Comando no v醠ido"
+msgMulti:	.asciz "Multiplicaci贸n de la forma: A*B\n"
+msgDiv:		.asciz "Divisi贸n de la forma: A/B\n"
+msgPow: 	.asciz "Potenciaci贸n de la forma: A^B\n"
+msgDef:		.asciz "Comando no v谩lido"
 resultado:	.asciz "Resultado: %d \n"
 mip1:	.asciz "                     ....  ....  ....  ......\n"
 mipr1:	.asciz "                     |   \\/   |  |  |  |     \\ \n"
@@ -27,13 +28,13 @@ mip2: 	.asciz "                     |  |\\/|  |  |  |  |  |>  |\n"
 mipr2:	.asciz "                     |  |  |  |  |  |  |  ___/\n"
 mip3:	.asciz "                     |..|  |..|  |..|  |..|\n\n"
 mip4:	.asciz "    [--]            UNIVERSIDAD DE EL SALVADOR            [--]\n"
-mip5:	.asciz "    [--]       Facultad de Ingenier韆 y Arquitectura      [--]\n"
-mip6:	.asciz "    [--]     Escuela de Ing. de Sistemas Inform醫icos     [--]\n"
+mip5:	.asciz "    [--]       Facultad de Ingenier铆a y Arquitectura      [--]\n"
+mip6:	.asciz "    [--]     Escuela de Ing. de Sistemas Inform谩ticos     [--]\n"
 mip7: 	.asciz "    [--]     Proyecto:                                    [--]\n"
 mip8:	.asciz "    [--]       Calculadora que registra operaciones       [--]\n"
 mip9:	.asciz "    [--]     Creado por:                                  [--]\n"
-mip10:	.asciz "    [--]             Daris Jorge & Luis Ch醰ez            [--]\n"
-mip11:	.asciz "    [--]        SELECCIONAR UNA OPCI覰 PARA INICIAR       [--]\n"
+mip10:	.asciz "    [--]             Daris Jorge & Luis Ch谩vez            [--]\n"
+mip11:	.asciz "    [--]        SELECCIONAR UNA OPCI脫N PARA INICIAR       [--]\n"
 mip12:	.asciz "    [--] .________________________________________________[--]\n"
 mip13:	.asciz "    \\_.---------------------------------------------------- /\n"
 
@@ -41,8 +42,18 @@ mip13:	.asciz "    \\_.---------------------------------------------------- /\n"
 	.text
 	.global main
 main:
+	//Crear/Abrir archivo de registro
+	PUSH {R4, LR}
+	LDR R0, =nomFile
+	MOV R1, #0x42
+	MOV R2, #448
+	MOV R7, #5
+	SVC 0
+	CMP R0, #-1
+	BEQ _errorFile
+	MOV R4, R0
+
 	//Intefaz inicial
-	PUSH {LR}
 	LDR R0,=mip1
 	BL printf
 	LDR R0, =mipr1
@@ -83,21 +94,36 @@ main:
 	LDR R0, [R0]
 	CMP R0,#6
 	BEQ _case6
+
 _data:	//solicitar operandos 1 y 2
 	LDR R0, =msgIn1
 	BL printf
 	LDR R0, =fmt
 	LDR R1, =in1
 	BL scanf
+	MOV R5, R0 //NUMERO DE CARACTERES
 
-	LDR R0, =fmt
-	BL fileManager
+	//Registrar en el archivo externo los operandos
+	MOV R0, R4
+	LDR R1, =in1
+	MOV R2, #8
+	MOV R7, #4
+	SVC 0
+
 
 	LDR R0, =msgIn2
 	BL printf
 	LDR R0, =fmt
 	LDR R1, =in2
 	BL scanf
+
+	//Registrar en el archivo externo los operandos
+	MOV R0, R4
+	LDR R1, =in2
+	MOV R2, #8
+	MOV R7, #4
+	SVC 0
+
 	//cargar valor de operacion
 _switch:
 	LDR R0, =op
@@ -118,6 +144,14 @@ _switch:
 _case1:
 	LDR R0, =msgSuma
 	BL printf
+
+	//Registrar en el archivo externo los operandos
+	MOV R0, R4
+	LDR R1, =msgSuma
+	MOV R2, #75
+	MOV R7, #4
+	SVC 0
+
 	LDR R2,=in1
 	LDR R2, [R2]
 	LDR R1, =in2
@@ -125,6 +159,15 @@ _case1:
 	ADD R1, R1, R2
 	LDR R0, =resultado
 	BL printf
+
+	//Registrar en el archivo externo los operandos
+	MOV R0, R4
+	LDR R1, =resultado
+	MOV R2, #8
+	MOV R7, #4
+	SVC 0
+
+
 	BAL _end
 _case2:
 	LDR R0, =msgResta
@@ -164,7 +207,7 @@ _case4:
 _case5:
 	LDR R0, =msgPow
 	BL printf
-	//implementando la funci髇 de power
+	//implementando la funci贸n de power
 	//se cargan la base y su potencia
 	LDR R0, =in1
 	LDR R0, [R0]
@@ -181,8 +224,15 @@ _default:
 	LDR R0, =msgDef
 	BL printf
 	BAL _end
+_errorFile:
+	LDR R0, =msgError
+	BL printf
+	BAL _end
 _end:
-	POP {PC}
+	MOV R7, #6
+	SVC 0
+	MOV R0, R4
+	POP {R4, PC}
 exit:
 	MOV R7, #1
 	SWI 0
