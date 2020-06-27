@@ -91,18 +91,6 @@ _menu:
 	CMP R0,#6
 	BEQ _case6
 
-_data:	//solicitar operandos 1 y 2
-	LDR R0, =msgIn1
-	BL printf
-	LDR R0, =fmt
-	LDR R1, =in1
-	BL scanf
-	MOV R5, R0 //NUMERO DE CARACTERES
-	LDR R0, =msgIn2
-	BL printf
-	LDR R0, =fmt
-	LDR R1, =in2
-	BL scanf
 	//cargar valor de operacion
 _switch:
 	LDR R0, =op
@@ -121,6 +109,17 @@ _switch:
 	BEQ _case6
 	BNE _default
 	_case1:
+		LDR R0, =msgIn1
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in1
+		BL scanf
+		MOV R5, R0 //NUMERO DE CARACTERES
+		LDR R0, =msgIn2
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in2
+		BL scanf
 		//Impresión de la operacion a ejecutar
 		LDR R0, =tipoOp1
 		LDR R2, =in1
@@ -141,6 +140,17 @@ _switch:
 
 		BAL _fileRegister
 	_case2:
+		LDR R0, =msgIn1
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in1
+		BL scanf
+		MOV R5, R0 //NUMERO DE CARACTERES
+		LDR R0, =msgIn2
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in2
+		BL scanf
 		//Impresión de la operacion a ejecutar
 		LDR R0, =tipoOp2
 		LDR R2, =in2
@@ -160,6 +170,17 @@ _switch:
 		BL printf
 		BAL _fileRegister
 	_case3:
+		LDR R0, =msgIn1
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in1
+		BL scanf
+		MOV R5, R0 //NUMERO DE CARACTERES
+		LDR R0, =msgIn2
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in2
+		BL scanf
 		//Impresión de la operacion a ejecutar
 		LDR R0, =tipoOp3
 		LDR R2, =in2
@@ -179,6 +200,17 @@ _switch:
 		BL printf
 		BAL _fileRegister
 	_case4:
+		LDR R0, =msgIn1
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in1
+		BL scanf
+		MOV R5, R0 //NUMERO DE CARACTERES
+		LDR R0, =msgIn2
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in2
+		BL scanf
 		//Impresión de la operacion a ejecutar
 		LDR R0, =tipoOp4
 		LDR R2, =in2
@@ -200,6 +232,17 @@ _switch:
 		BL printf
 		BAL _fileRegister
 	_case5:
+		LDR R0, =msgIn1
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in1
+		BL scanf
+		MOV R5, R0 //NUMERO DE CARACTERES
+		LDR R0, =msgIn2
+		BL printf
+		LDR R0, =fmt
+		LDR R1, =in2
+		BL scanf
 		//Impresión de la operacion a ejecutar
 		LDR R0, =tipoOp5
 		LDR R2, =in2
