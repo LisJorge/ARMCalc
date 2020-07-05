@@ -211,6 +211,10 @@ _switch:
 		LDR R0, =fmt
 		LDR R1, =in2
 		BL scanf
+		LDR R1, =in2
+		LDR R1, [R1]
+		CMP R1, #0
+		BEQ _case4
 		//Impresión de la operacion a ejecutar
 		LDR R0, =tipoOp4
 		LDR R2, =in2
