@@ -1,17 +1,19 @@
 /*
 Archivo: power.s
 
-Descripci髇: Funci髇 que realiza la potenciaci髇 de dos n鷐eros de la 
+Descripci贸n: Funci贸n que realiza la potenciaci贸n de dos n煤meros de la 
 forma A^B
 
-Par醡etros:
+Par谩metros:
 		R0->A
 		R1->B
 
-Salida:		R0=resultado de la potenciaci髇
+Salida:		R0=resultado de la potenciaci贸n
 */
 	.global power
-power: 	
+power:
+	CMP R1, #0
+	BEQ _powerAux0
 	MOV R2,R0
 	SUB R1, R1, #1
 _powerAux:
@@ -21,5 +23,11 @@ _powerAux:
 	SUB R1, R1, #1
 	BAL _powerAux
 _powerend:
-	BX LR 
+	BX LR
+
+_powerAux0:
+	MOV R0, #1
+	BAL _powerend
+
+
 
