@@ -21,7 +21,8 @@ tipoOp1:	.asciz "Operación: %d + %d\t"
 tipoOp2:	.asciz "Operación: %d - %d\t"
 tipoOp3:	.asciz "Operación: %d x %d\t"
 tipoOp4:	.asciz "Operación: %d / %d\t"
-tipoOp5:	.asciz "Operación: %d ^ %d\t"
+tipoOp5:	.asciz "Operación: %d ^ %d\tResultado: %d \n"
+tipoOp6:	.asciz "Operación: %d ^ %d\tResultado: 1/%d \n"
 resultado:	.asciz "Resultado: %d \n"
 fin:		.asciz "\n.............................................................\n\n"
 //para preguntar si desea hacer otra operacion
@@ -42,7 +43,6 @@ mip10:	.asciz "    [--]             Daris Jorge & Luis Chávez            [--]\n
 mip11:	.asciz "    [--]        SELECCIONAR UNA OPCIÓN PARA INICIAR       [--]\n"
 mip12:	.asciz "    [--] .________________________________________________[--]\n"
 mip13:	.asciz "    \\_.---------------------------------------------------- /\n"
-
 
 	.text
 	.global main
@@ -246,12 +246,6 @@ _switch:
 		LDR R0, =fmt
 		LDR R1, =in2
 		BL scanf
-		LDR R0, =tipoOp5
-		LDR R2, =in2
-		LDR R2, [R2]
-		LDR R1, =in1
-		LDR R1, [R1]
-		BL printf
 		//implementando la función de power
 		LDR R0, =in1
 		LDR R0, [R0]
@@ -261,9 +255,23 @@ _switch:
 		MOV R1,R0
 		LDR R3, =res
 		STR R1, [R3]
-		LDR R0, =resultado
-		BL printf
-		BAL _fileRegister
+		LDR R1, =in2
+		LDR R1, [R1]
+		CMP R1, #0
+		BLE menor
+		LDR R0, =tipoOp5
+		continua:
+			LDR R3, =res
+			LDR R3, [R3]
+			LDR R2, =in2
+			LDR R2, [R2]
+			LDR R1, =in1
+			LDR R1, [R1]
+			BL printf
+			BAL _fileRegister
+		menor:
+			LDR R0, =tipoOp6
+			BAL continua
 	_case6:
 		BAL _end
 	_default:

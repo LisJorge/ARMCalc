@@ -11,11 +11,20 @@ Parámetros:
 Salida:		R0=resultado de la potenciación
 */
 	.global power
+
 power:
 	CMP R1, #0
 	BEQ _powerAux0
 	MOV R2,R0
+	BGE _positivo
+_negativo:
+	MOV R3, #-1
+    MUL R1, R1, R3
 	SUB R1, R1, #1
+	B _powerAux
+_positivo:
+	SUB R1, R1, #1
+	B _powerAux
 _powerAux:
 	CMP R1, #0
 	BEQ _powerend
