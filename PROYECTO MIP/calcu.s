@@ -222,7 +222,6 @@ _switch:
 		LDR R1, =in1
 		LDR R1, [R1]
 		BL printf
-
 		//implementando la funcion de division
 		LDR R0, =in1
 		LDR R0, [R0]
@@ -247,16 +246,13 @@ _switch:
 		LDR R0, =fmt
 		LDR R1, =in2
 		BL scanf
-		//Impresión de la operacion a ejecutar
 		LDR R0, =tipoOp5
 		LDR R2, =in2
 		LDR R2, [R2]
 		LDR R1, =in1
 		LDR R1, [R1]
 		BL printf
-
 		//implementando la función de power
-		//se cargan la base y su potencia
 		LDR R0, =in1
 		LDR R0, [R0]
 		LDR R1, =in2

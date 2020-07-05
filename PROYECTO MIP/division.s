@@ -16,7 +16,7 @@ operaci�n. No se valida la entrada de n�meros positivos.
 */
         .global division
 division:
-        mov r3, #0
+        mov R3, #0
         for:
                 CMP R0, R1
                 ADDGE R3, R3, #1
