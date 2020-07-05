@@ -21,9 +21,9 @@ tipoOp1:	.asciz "Operación: %d + %d\t"
 tipoOp2:	.asciz "Operación: %d - %d\t"
 tipoOp3:	.asciz "Operación: %d x %d\t"
 tipoOp4:	.asciz "Operación: %d / %d\t"
-tipoOp5:	.asciz "Operación: %d ^ %d\tResultado: %d \n"
-tipoOp6:	.asciz "Operación: %d ^ %d\tResultado: 1/%d \n"
+tipoOp5:	.asciz "Operación: %d ^ %d\t"
 resultado:	.asciz "Resultado: %d \n"
+resultado2:	.asciz "Resultado: 1/%d \n"
 fin:		.asciz "\n.............................................................\n\n"
 //para preguntar si desea hacer otra operacion
 ask:		.asciz "\n¿Desea realizar otra operación?\n  [1] Sí\n  [0] No\n\n"
@@ -43,6 +43,7 @@ mip10:	.asciz "    [--]             Daris Jorge & Luis Chávez            [--]\n
 mip11:	.asciz "    [--]        SELECCIONAR UNA OPCIÓN PARA INICIAR       [--]\n"
 mip12:	.asciz "    [--] .________________________________________________[--]\n"
 mip13:	.asciz "    \\_.---------------------------------------------------- /\n"
+
 
 	.text
 	.global main
@@ -246,6 +247,12 @@ _switch:
 		LDR R0, =fmt
 		LDR R1, =in2
 		BL scanf
+		LDR R0, =tipoOp5
+		LDR R2, =in2
+		LDR R2, [R2]
+		LDR R1, =in1
+		LDR R1, [R1]
+		BL printf
 		//implementando la función de power
 		LDR R0, =in1
 		LDR R0, [R0]
@@ -255,23 +262,20 @@ _switch:
 		MOV R1,R0
 		LDR R3, =res
 		STR R1, [R3]
-		LDR R1, =in2
-		LDR R1, [R1]
-		CMP R1, #0
-		BLE menor
-		LDR R0, =tipoOp5
-		continua:
-			LDR R3, =res
-			LDR R3, [R3]
-			LDR R2, =in2
-			LDR R2, [R2]
-			LDR R1, =in1
-			LDR R1, [R1]
+		LDR R2, =in2
+		LDR R2, [R2]
+		CMP R2, #0
+		BLT menor
+		BGT mayor
+		menor:
+			LDR R0, =resultado2
+			BAL endcase5
+		mayor:
+			LDR R0, =resultado
+			BAL endcase5
+		endcase5:
 			BL printf
 			BAL _fileRegister
-		menor:
-			LDR R0, =tipoOp6
-			BAL continua
 	_case6:
 		BAL _end
 	_default:
@@ -282,14 +286,31 @@ _switch:
 _fileRegister: //registra en un archivo las operaciones
 	//registrar resultado
 	PUSH {R0 -R4}
-	LDR R0, =nomFile
-	LDR R1, =modo
-	BL fopen
-	LDR R1, =resultado
-	LDR R2, =res
-	LDR R2, [R2]
-	BL fprintf
-
+	LDR R0, =op
+	LDR R0, [R0]
+	CMP R0, #5
+	BEQ potencia
+	basico:
+		LDR R0, =nomFile
+		LDR R1, =modo
+		BL fopen
+		LDR R1, =resultado
+		LDR R2, =res
+		LDR R2, [R2]
+		BL fprintf
+		BAL _switch2
+	potencia:
+		LDR R3, =in2
+		LDR R3, [R3]
+		CMP R3, #0
+		BGE basico
+		LDR R0, =nomFile
+		LDR R1, =modo
+		BL fopen
+		LDR R1, =resultado2
+		LDR R2, =res
+		LDR R2, [R2]
+		BL fprintf
 	//registrar operacion
 		//switch para elegir operacion a registrar
 	_switch2:
