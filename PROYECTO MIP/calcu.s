@@ -44,7 +44,6 @@ mip11:	.asciz "    [--]        SELECCIONAR UNA OPCIÓN PARA INICIAR       [--]\n
 mip12:	.asciz "    [--] .________________________________________________[--]\n"
 mip13:	.asciz "    \\_.---------------------------------------------------- /\n"
 
-
 	.text
 	.global main
 main:
@@ -364,8 +363,6 @@ _fileRegister: //registra en un archivo las operaciones
 		LDR R3, [R3]
 		BL fprintf
 	POP {R0 - R4}
-
-
 
 	BAL _pregunta
 
